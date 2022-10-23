@@ -14,14 +14,23 @@ const stringToColor = (string, saturation = 100, lightness = 75) => {
 
 const labels = new Set()
 
-const datasets = stat.map(({package: packName, downloads}) => {
-  const data = []
+const {format} = new Intl.DateTimeFormat('uk', {year: '2-digit', month: 'long'});
 
+const datasets = stat.map(({package: packName, downloads}) => {
+
+  /** @type {Map<string, number>} */
+  const perMonthMap = new Map()
 
   for (const statForDay of downloads) {
-    labels.add(statForDay.day)
-    data.push(statForDay.downloads)
+    const date = new Date(statForDay.day)
+    date.setDate(1)
+    const mouth = format(date)
+    labels.add(mouth)
+    perMonthMap.set(mouth, (perMonthMap.get(mouth) || 0) + statForDay.downloads)
   }
+
+
+  const data = Array.from(perMonthMap.values())
 
   const label = packName.replace('@iconify-prerendered/vue-', '')
   const backgroundColor = stringToColor(label)

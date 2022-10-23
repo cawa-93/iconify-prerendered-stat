@@ -3,7 +3,7 @@ import * as fs from 'node:fs'
 
 function loadStatForPackage(packageName) {
     console.log(`Loading ${packageName}`)
-    return fetch(`https://api.npmjs.org/downloads/range/last-month/${packageName}`).then(r => r.json())
+    return fetch(`https://api.npmjs.org/downloads/range/last-year/${packageName}`).then(r => r.json())
 }
 
 
